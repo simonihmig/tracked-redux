@@ -9,10 +9,7 @@
     "allowJs": true,
     "outDir": "addon"
   },
-  "exclude": [
-    "node_modules",
-    "tmp",
-    "addon",
-    "ember-addon-main.js"
+  "include": [
+    "src/**/*",
   ]
 }
