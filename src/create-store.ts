@@ -1,47 +1,43 @@
-import { createStore as reduxCreateStore, Store, Reducer, Action, StoreEnhancer, PreloadedState } from 'redux';
+import {
+  createStore as reduxCreateStore,
+  Store,
+  Reducer,
+  Action,
+  StoreEnhancer,
+  PreloadedState,
+} from 'redux';
 import { createNode, updateNode } from './proxy';
 
-export default function createStore<
-  S,
-  A extends Action,
-  Ext,
-  StateExt
->(
+export default function createStore<S, A extends Action, Ext, StateExt>(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S & StateExt, A> & Ext
+): Store<S & StateExt, A> & Ext;
 
-export default function createStore<
-  S,
-  A extends Action,
-  Ext,
-  StateExt
->(
+export default function createStore<S, A extends Action, Ext, StateExt>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<S & StateExt, A> & Ext;
 
-export default function createStore<
-  S,
-  A extends Action,
-  Ext,
-  StateExt
->(
+export default function createStore<S, A extends Action, Ext, StateExt>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<S & StateExt, A> & Ext {
-  const store = reduxCreateStore(reducer, preloadedState as PreloadedState<S>, enhancer);
+  const store = reduxCreateStore(
+    reducer,
+    preloadedState as PreloadedState<S>,
+    enhancer
+  );
 
-  let originalGetState = store.getState.bind(store);
+  const originalGetState = store.getState.bind(store);
 
   let rootNode;
 
-  store.getState = () => {
+  store.getState = (): S => {
     if (rootNode === undefined) {
       rootNode = createNode({
-        state: originalGetState()
+        state: originalGetState(),
       });
     }
 
@@ -50,7 +46,7 @@ export default function createStore<
 
   store.subscribe(() => {
     updateNode(rootNode, {
-      state: originalGetState()
+      state: originalGetState(),
     });
   });
 

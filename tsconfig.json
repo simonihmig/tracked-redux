@@ -6,13 +6,13 @@
     "inlineSources": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "types": [
-      "qunit"
-    ]
+    "allowJs": true,
+    "outDir": "addon"
   },
   "exclude": [
     "node_modules",
     "tmp",
-    "dist"
+    "addon",
+    "ember-addon-main.js"
   ]
 }

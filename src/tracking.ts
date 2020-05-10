@@ -1,21 +1,20 @@
 import { tracked } from '@glimmer/tracking';
-// import { get, notifyPropertyChange } from '@ember/object';
 
 class Tag {
-  @tracked private __tag_value__: undefined;
+  @tracked private __tagValue__: undefined;
 
-  static consumeTag(tag: Tag) {
+  static consumeTag(tag: Tag): void {
     // read the tag value
-    tag.__tag_value__;
+    tag.__tagValue__;
   }
 
-  static dirtyTag(tag: Tag) {
+  static dirtyTag(tag: Tag): void {
     // write the tag value
-    tag.__tag_value__ = undefined;
+    tag.__tagValue__ = undefined;
   }
 }
 
-export function createTag() {
+export function createTag(): Tag {
   return new Tag();
 }
 
@@ -26,15 +25,7 @@ export const dirtyTag = Tag.dirtyTag;
 
 const COLLECTION_TAG_MAP = new WeakMap();
 
-export function setConsumeCollection(fn: (obj: object) => void) {
-  consumeCollection = fn;
-}
-
-export function setDirtyCollection(fn: (obj: object) => void) {
-  dirtyCollection = fn;
-}
-
-export let consumeCollection = (obj: object) =>  {
+export let consumeCollection = (obj: object): void => {
   let tag = COLLECTION_TAG_MAP.get(obj);
 
   if (tag === undefined) {
@@ -44,12 +35,20 @@ export let consumeCollection = (obj: object) =>  {
   }
 
   consumeTag(tag);
-}
+};
 
-export let dirtyCollection = (obj: object) => {
-  let tag = COLLECTION_TAG_MAP.get(obj);
+export let dirtyCollection = (obj: object): void => {
+  const tag = COLLECTION_TAG_MAP.get(obj);
 
   if (tag !== undefined) {
     dirtyTag(tag);
   }
 };
+
+export function setConsumeCollection(fn: (obj: object) => void): void {
+  consumeCollection = fn;
+}
+
+export function setDirtyCollection(fn: (obj: object) => void): void {
+  dirtyCollection = fn;
+}
