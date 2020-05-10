@@ -18,6 +18,17 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
+  "scripts": {
+    "build": "ember build --environment=production",
+    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*",
+    "lint:hbs": "ember-template-lint .",
+    "lint:js": "eslint .",
+    "start": "ember serve",
+    "test": "npm-run-all lint:* test:*",
+    "test:ember": "ember test",
+    "test:ember-compatibility": "ember try:each",
+    "prepublish": "tsc"
+  },
   "dependencies": {
     "@glimmer/env": "^0.1.7",
     "@glimmer/tracking": "^1.0.0",
