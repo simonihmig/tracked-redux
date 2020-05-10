@@ -1,19 +1,23 @@
 {
   "name": "tracked-redux",
   "version": "0.0.0",
+  "private": false,
   "description": "Autotracked Redux",
-  "main": "addon/index.js",
-  "repository": "git@github.com:pzuraq/tracked-redux.git",
   "keywords": [
     "ember-addon"
   ],
-  "author": "Chris H Garrett",
+  "repository": "git@github.com:pzuraq/tracked-redux.git",
   "license": "MIT",
-  "private": false,
+  "author": "Chris H Garrett",
+  "main": "addon/index.js",
   "files": [
     "addon/**/*",
     "ember-addon-main.js"
   ],
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
   "dependencies": {
     "@glimmer/env": "^0.1.7",
     "@glimmer/tracking": "^1.0.0",
@@ -55,13 +59,29 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
     "qunit-dom": "^1.2.0",
+    "release-it": "^13.5.7",
+    "release-it-lerna-changelog": "^2.3.0",
     "typescript": "^3.8.3"
   },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "es5"
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   },
   "ember-addon": {
     "main": "ember-addon-main.js"
+  },
+  "release-it": {
+    "plugins": {
+      "release-it-lerna-changelog": {
+        "infile": "CHANGELOG.md",
+        "launchEditor": true
+      }
+    },
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "tokenRef": "GITHUB_AUTH"
+    }
   }
 }
