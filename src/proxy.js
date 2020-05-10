@@ -1,5 +1,5 @@
 import { DEBUG } from '@glimmer/env';
-import { createTag, consumeTag, dirtyTag, dirtyCollection } from './tracking';
+import { createTag, consumeTag, dirtyTag, consumeCollection, dirtyCollection } from './tracking';
 
 const REDUX_PROXY_LABEL = Symbol();
 
@@ -50,6 +50,7 @@ const objectProxyHandler = {
   },
 
   ownKeys(node) {
+    consumeCollection(node.proxy);
     return Reflect.ownKeys(node.value);
   },
 
@@ -78,6 +79,10 @@ class ArrayTreeNode {
 
 const arrayProxyHandler = {
   get([node], key) {
+    if (key === 'length') {
+      consumeCollection(node.proxy);
+    }
+
     return objectProxyHandler.get(node, key);
   },
 
@@ -112,6 +117,8 @@ export function updateNode(node, newValue) {
   node.value = newValue;
 
   if (Array.isArray(value) && value.length !== newValue.length) {
+    dirtyCollection(node.proxy);
+  } else if (Object.keys(value).length !== Object.keys(newValue).length) {
     dirtyCollection(node.proxy);
   }
 

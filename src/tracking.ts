@@ -24,46 +24,32 @@ export const dirtyTag = Tag.dirtyTag;
 
 ////////////
 
-// const COLLECTION = Symbol('COLLECTION');
+const COLLECTION_TAG_MAP = new WeakMap();
 
-// export function setConsumeCollection(fn: (obj: object) => void) {
-//   consumeCollection = fn;
-// }
+export function setConsumeCollection(fn: (obj: object) => void) {
+  consumeCollection = fn;
+}
 
-// export let consumeCollection = (obj: object) =>  {
+export function setDirtyCollection(fn: (obj: object) => void) {
+  dirtyCollection = fn;
+}
 
-// }
-
-// export let dirtyCollection = (obj: object) => {
-//   notifyPropertyChange(obj, '[]')
-// }
-
-////////////
-
-const OBJECT_TAGS = new WeakMap<object, Map<unknown, Tag>>();
-
-function getOrCreateTag(obj: object, key: unknown) {
-  let tags = OBJECT_TAGS.get(obj);
-
-  if (tags === undefined) {
-    tags = new Map();
-    OBJECT_TAGS.set(obj, tags);
-  }
-
-  let tag = tags.get(key);
+export let consumeCollection = (obj: object) =>  {
+  let tag = COLLECTION_TAG_MAP.get(obj);
 
   if (tag === undefined) {
-    tag = new Tag();
-    tags.set(key, tag);
+    tag = createTag();
+
+    COLLECTION_TAG_MAP.set(obj, tag);
   }
 
-  return tag;
+  consumeTag(tag);
 }
 
-export function consumeKey(obj: object, key: unknown) {
-  consumeTag(getOrCreateTag(obj, key));
-}
+export let dirtyCollection = (obj: object) => {
+  let tag = COLLECTION_TAG_MAP.get(obj);
 
-export function dirtyKey(obj: object, key: unknown) {
-  dirtyTag(getOrCreateTag(obj, key));
-}
+  if (tag !== undefined) {
+    dirtyTag(tag);
+  }
+};
