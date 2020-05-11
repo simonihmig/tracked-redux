@@ -16,6 +16,7 @@ class ObjectTreeNode {
     this.tag = createTag();
     this.tags = Object.create(null);
     this.children = Object.create(null);
+    this.collectionTag = null;
   }
 
   toString() {
@@ -56,7 +57,8 @@ const objectProxyHandler = {
   },
 
   ownKeys(node) {
-    consumeCollection(node.proxy);
+    console.log('own keys');
+    consumeCollection(node);
     return Reflect.ownKeys(node.value);
   },
 
@@ -69,9 +71,13 @@ const objectProxyHandler = {
   },
 
   set() {
-    throw new Error(
-      'You attempted to set a value on the Redux store directly. This is not allowed, you must use `dispatch` to send an action which updates the state of the store.'
-    );
+    if (DEBUG) {
+      throw new Error(
+        'You attempted to set a value on the Redux store directly. This is not allowed, you must use `dispatch` to send an action which updates the state of the store.'
+      );
+    }
+
+    return false;
   },
 };
 
@@ -82,13 +88,14 @@ class ArrayTreeNode {
     this.tag = createTag();
     this.tags = Object.create(null);
     this.children = Object.create(null);
+    this.collectionTag = null;
   }
 }
 
 const arrayProxyHandler = {
   get([node], key) {
     if (key === 'length') {
-      consumeCollection(node.proxy);
+      consumeCollection(node);
     }
 
     return objectProxyHandler.get(node, key);
@@ -107,9 +114,7 @@ const arrayProxyHandler = {
   },
 
   set() {
-    throw new Error(
-      'You attempted to set a value on the Redux store directly. This is not allowed, you must use `dispatch` to send an action which updates the state of the store.'
-    );
+    return objectProxyHandler.set();
   },
 };
 
@@ -127,9 +132,17 @@ export function updateNode(node, newValue) {
   node.value = newValue;
 
   if (Array.isArray(value) && value.length !== newValue.length) {
-    dirtyCollection(node.proxy);
-  } else if (Object.keys(value).length !== Object.keys(newValue).length) {
-    dirtyCollection(node.proxy);
+    dirtyCollection(node);
+  } else {
+    let oldKeys = Object.keys(value);
+    let newKeys = Object.keys(newValue);
+
+    if (
+      oldKeys.length !== newKeys.length ||
+      oldKeys.some((k) => !newKeys.includes(k))
+    ) {
+      dirtyCollection(node);
+    }
   }
 
   for (let key in tags) {
@@ -137,6 +150,7 @@ export function updateNode(node, newValue) {
     let newChildValue = newValue[key];
 
     if (childValue !== newChildValue) {
+      dirtyCollection(node);
       dirtyTag(tags[key]);
     }
 
@@ -168,20 +182,25 @@ export function updateNode(node, newValue) {
 
 function deleteNode(node) {
   dirtyTag(node.tag);
+  dirtyCollection(node);
   Object.values(node.tags).map(dirtyTag);
   Object.values(node.children).map(deleteNode);
 }
 
-const listStyle = {
-  style:
-    'list-style-type: none; padding: 0; margin: 0 0 0 12px; font-style: normal; position: relative',
-};
+if (DEBUG) {
+  const listStyle = {
+    style:
+      'list-style-type: none; padding: 0; margin: 0 0 0 12px; font-style: normal; position: relative',
+  };
 
-const defaultValueKeyStyle = { style: 'color: #7D258C' };
-const primitiveValueKeyStyle = { style: 'color: #7D258C; margin-left: 15px;' };
+  const defaultValueKeyStyle = { style: 'color: #7D258C' };
+  const primitiveValueKeyStyle = {
+    style: 'color: #7D258C; margin-left: 15px;',
+  };
 
-window.devtoolsFormatters = [
-  {
+  window.devtoolsFormatters = window.devtoolsFormatters || [];
+
+  window.devtoolsFormatters.push({
     header(obj, config = {}) {
       if (!obj[REDUX_PROXY_LABEL]) {
         return null;
@@ -242,5 +261,5 @@ window.devtoolsFormatters = [
 
       return ['ol', listStyle, ...children];
     },
-  },
-];
+  });
+}

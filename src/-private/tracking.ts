@@ -23,32 +23,34 @@ export const dirtyTag = Tag.dirtyTag;
 
 ////////////
 
-const COLLECTION_TAG_MAP = new WeakMap();
+interface Node {
+  collectionTag: Tag | undefined;
+  proxy: object;
+}
 
-export let consumeCollection = (obj: object): void => {
-  let tag = COLLECTION_TAG_MAP.get(obj);
+export let consumeCollection = (node: Node): void => {
+  let tag = node.collectionTag;
 
   if (tag === undefined) {
-    tag = createTag();
-
-    COLLECTION_TAG_MAP.set(obj, tag);
+    tag = node.collectionTag = createTag();
   }
 
   consumeTag(tag);
 };
 
-export let dirtyCollection = (obj: object): void => {
-  const tag = COLLECTION_TAG_MAP.get(obj);
+export let dirtyCollection = (node: Node): void => {
+  const tag = node.collectionTag;
 
   if (tag !== undefined) {
     dirtyTag(tag);
   }
 };
 
-export function setConsumeCollection(fn: (obj: object) => void): void {
-  consumeCollection = fn;
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const Ember: any;
 
-export function setDirtyCollection(fn: (obj: object) => void): void {
-  dirtyCollection = fn;
+if (Ember !== undefined) {
+  consumeCollection = (node): void => Ember.get(node.proxy, '[]');
+  dirtyCollection = (node): void =>
+    Ember.notifyPropertyChange(node.proxy, '[]');
 }
