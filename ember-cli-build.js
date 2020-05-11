@@ -7,6 +7,10 @@ module.exports = function (defaults) {
     autoImport: {
       exclude: ['@glimmer/tracking'],
     },
+
+    'ember-cli-babel': {
+      includePolyfill: true,
+    },
   });
 
   /*
