@@ -1,5 +1,5 @@
 <ul>
-  {{#each this.redux.state.todos as |todo index|}}
+  {{#each this.redux.state.todos as |todo|}}
     <li>
       <input type="checkbox" checked={{todo.completed}} {{on "click" (fn this.toggleTodo todo)}} />
       {{todo.completed}}
@@ -9,4 +9,4 @@
 </ul>
 
 <input value={{this.input}} {{on "input" this.updateInput}}/>
-<button {{on "click" this.addTodo}}>Add Item</button>
+<button type="button" {{on "click" this.addTodo}}>Add Item</button>
