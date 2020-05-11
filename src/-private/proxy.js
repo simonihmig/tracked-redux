@@ -57,7 +57,6 @@ const objectProxyHandler = {
   },
 
   ownKeys(node) {
-    console.log('own keys');
     consumeCollection(node);
     return Reflect.ownKeys(node.value);
   },

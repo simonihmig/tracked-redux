@@ -1,14 +1,7 @@
 import Service from '@ember/service';
-import { action, get, notifyPropertyChange } from '@ember/object';
-import {
-  createStore,
-  setConsumeCollection,
-  setDirtyCollection,
-} from 'tracked-redux';
+import { action } from '@ember/object';
+import { createStore } from 'tracked-redux';
 import rootReducer from '../reducers';
-
-setConsumeCollection((obj) => get(obj, '[]'));
-setDirtyCollection((obj) => notifyPropertyChange(obj, '[]'));
 
 export default class ReduxService extends Service {
   #store = createStore(
