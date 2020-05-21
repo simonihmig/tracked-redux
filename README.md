@@ -4,6 +4,8 @@ Tracked Redux
 This library provides an autotracked version of [Redux](https://redux.js.org/).
 
 ```js
+import { createStore } from 'tracked-redux';
+
 const store = createStore((state = { todos: [] }, action) => {
   if (action.type === 'ADD_TODO') {
     return { todos: [...state.todos, action.todo] };
