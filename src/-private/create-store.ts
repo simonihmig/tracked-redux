@@ -31,20 +31,23 @@ export default function createStore<S, A extends Action, Ext, StateExt>(
   );
 
   const originalGetState = store.getState.bind(store);
-
-  let rootNode;
-
-  store.getState = (): S => {
+  const ensureRootNode = (): void => {
     if (rootNode === undefined) {
       rootNode = createNode({
         state: originalGetState(),
       });
     }
+  }
 
+  let rootNode;
+
+  store.getState = (): S => {
+    ensureRootNode();
     return rootNode.proxy.state;
   };
 
   store.subscribe(() => {
+    ensureRootNode();
     updateNode(rootNode, {
       state: originalGetState(),
     });
