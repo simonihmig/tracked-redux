@@ -25,7 +25,15 @@ function createCache(fn) {
 
 module('Unit | basic', () => {
   module('primitive root', () => {
-    test('it works', (assert) => {
+    test('redux works', (assert) => {
+      let store = createStore((state = 0) => ++state);
+
+      store.dispatch({ type: 'INCREMENT' });
+
+      assert.equal(store.getState(), 2, 'value is correct');
+    });
+
+    test('caching works', (assert) => {
       let store = createStore((state = 0) => ++state);
 
       let cache = createCache(() => store.getState());
