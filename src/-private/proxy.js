@@ -33,7 +33,7 @@ const objectProxyHandler = {
     let { value } = node;
     let childValue = Reflect.get(value, key);
 
-    if (typeof childValue === 'object' && childValue !== null) {
+    if (typeof childValue === 'object' && childValue !== null && !(childValue instanceof Date)) {
       let childNode = node.children[key];
 
       if (childNode === undefined) {
@@ -153,7 +153,7 @@ export function updateNode(node, newValue) {
       dirtyTag(tags[key]);
     }
 
-    if (typeof newChildValue === 'object' && newChildValue !== null) {
+    if (typeof newChildValue === 'object' && newChildValue !== null && !(childValue instanceof Date)) {
       delete tags[key];
     }
   }
@@ -169,7 +169,8 @@ export function updateNode(node, newValue) {
     } else if (
       typeof newChildValue === 'object' &&
       newChildValue !== null &&
-      Object.getPrototypeOf(newChildValue) === Object.getPrototypeOf(childValue)
+      Object.getPrototypeOf(newChildValue) === Object.getPrototypeOf(childValue) &&
+      !(childValue instanceof Date)
     ) {
       updateNode(childNode, newChildValue);
     } else {
