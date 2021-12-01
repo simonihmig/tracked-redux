@@ -9,6 +9,23 @@ import {
 
 const REDUX_PROXY_LABEL = Symbol();
 
+function isValidObject(object) {
+  /*
+    Some objects should be treated like primitives.
+    Their values should be returned instead of a proxy/ObjectTreeNode.
+  */
+
+  let isValid = false;
+
+  if (object !== null && typeof object === 'object') {
+    isValid = true;
+    if (object instanceof Date) { isValid = false }
+    if (object instanceof RegExp) { isValid = false }
+  }
+
+  return isValid;
+}
+
 class ObjectTreeNode {
   constructor(value) {
     this.value = value;
@@ -33,7 +50,7 @@ const objectProxyHandler = {
     let { value } = node;
     let childValue = Reflect.get(value, key);
 
-    if (typeof childValue === 'object' && childValue !== null && !(childValue instanceof Date)) {
+    if (isValidObject(childValue)) {
       let childNode = node.children[key];
 
       if (childNode === undefined) {
@@ -153,7 +170,7 @@ export function updateNode(node, newValue) {
       dirtyTag(tags[key]);
     }
 
-    if (typeof newChildValue === 'object' && newChildValue !== null && !(childValue instanceof Date)) {
+    if (isValidObject(newChildValue)) {
       delete tags[key];
     }
   }
@@ -167,10 +184,8 @@ export function updateNode(node, newValue) {
     if (childValue === newChildValue) {
       continue;
     } else if (
-      typeof newChildValue === 'object' &&
-      newChildValue !== null &&
-      Object.getPrototypeOf(newChildValue) === Object.getPrototypeOf(childValue) &&
-      !(childValue instanceof Date)
+      isValidObject(newChildValue) &&
+      Object.getPrototypeOf(newChildValue) === Object.getPrototypeOf(childValue)
     ) {
       updateNode(childNode, newChildValue);
     } else {
