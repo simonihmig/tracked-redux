@@ -7,7 +7,8 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "allowJs": true,
-    "outDir": "addon"
+    "outDir": "addon",
+    "strict": true
   },
   "include": [
     "src/**/*",
