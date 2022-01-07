@@ -35,6 +35,8 @@
     "@glimmer/tracking": "^1.0.0",
     "ember-auto-import": "^1.5.3",
     "ember-cli-babel": "^7.22.1",
+    "ember-tracked-storage-polyfill": "^1.0.0",
+    "import": "^0.0.6",
     "redux": "^4.0.5"
   },
   "devDependencies": {
