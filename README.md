@@ -1,7 +1,27 @@
-Tracked Redux
+tracked-redux
 ==============================================================================
 
-This library provides an autotracked version of [Redux](https://redux.js.org/).
+This Ember addon provides an autotracked version of [Redux](https://redux.js.org/).
+
+
+Compatibility
+------------------------------------------------------------------------------
+
+* Ember.js v3.24 or above
+* Ember CLI v3.24 or above
+* Node.js v12 or above
+
+
+Installation
+------------------------------------------------------------------------------
+
+```
+ember install tracked-redux
+```
+
+
+Usage
+------------------------------------------------------------------------------
 
 ```js
 import { createStore } from 'tracked-redux';
@@ -34,36 +54,6 @@ will dirty.
 For more detailed usage instructions an examples, see the
 [Redux documentation](https://redux.js.org/introduction/getting-started).
 
-Usage as a Standard Package
-------------------------------------------------------------------------------
-
-Tracked Redux ships with Ember Addon settings for usage in Ember with zero
-configuration. However, it should also be usable as a standard NPM package.
-Modules are provided using ES2017, and standard bundlers should be able to work
-with them.
-
-Compatibility
-------------------------------------------------------------------------------
-
-* Ember.js v3.16 or above
-* Ember CLI v2.13 or above
-* Node.js v10 or above
-* Last two versions of Chrome, Safari, Firefox, Edge
-
-Installation
-------------------------------------------------------------------------------
-
-Using NPM:
-
-```
-npm install --save tracked-redux
-```
-
-Using Yarn:
-
-```
-yarn add tracked-redux
-```
 
 Debugging
 ------------------------------------------------------------------------------
@@ -82,6 +72,7 @@ these proxies appear nicer and easier to understand:
 Custom formatters have to be enabled in the devtools settings:
 
 ![Image of proxy logged in console](./docs/assets/enabling-custom-formatters.png)
+
 
 Contributing
 ------------------------------------------------------------------------------
