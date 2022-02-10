@@ -1,6 +1,6 @@
 import { tracked } from '@glimmer/tracking';
 
-class Tag {
+export class Tag {
   @tracked private __tagValue__: undefined;
 
   static consumeTag(tag: Tag): void {
@@ -23,15 +23,23 @@ export const dirtyTag = Tag.dirtyTag;
 
 ////////////
 
-interface Node {
-  collectionTag: Tag | undefined;
-  proxy: object;
+export interface Node<
+  T extends Array<unknown> | Record<string, unknown> =
+    | Array<unknown>
+    | Record<string, unknown>
+> {
+  collectionTag: Tag | null;
+  tag: Tag | null;
+  tags: Record<string, Tag>;
+  children: Record<string, Node>;
+  proxy: T;
+  value: T;
 }
 
 export let consumeCollection = (node: Node): void => {
   let tag = node.collectionTag;
 
-  if (tag === undefined) {
+  if (tag === null) {
     tag = node.collectionTag = createTag();
   }
 
@@ -41,7 +49,7 @@ export let consumeCollection = (node: Node): void => {
 export let dirtyCollection = (node: Node): void => {
   const tag = node.collectionTag;
 
-  if (tag !== undefined) {
+  if (tag !== null) {
     dirtyTag(tag);
   }
 };
