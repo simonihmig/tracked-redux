@@ -6,7 +6,7 @@
   "keywords": [
     "ember-addon"
   ],
-  "repository": "git@github.com:pzuraq/tracked-redux.git",
+  "repository": "git@github.com:simonihmig/tracked-redux.git",
   "license": "MIT",
   "author": "Chris H Garrett",
   "main": "addon/index.js",
