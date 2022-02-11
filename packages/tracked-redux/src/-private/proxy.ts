@@ -12,7 +12,7 @@ import {
 export const REDUX_PROXY_LABEL = Symbol();
 
 class ObjectTreeNode<T extends Record<string, unknown>> implements Node<T> {
-  proxy: T = (new Proxy(this, objectProxyHandler) as unknown) as T;
+  proxy: T = new Proxy(this, objectProxyHandler) as unknown as T;
   tag = createTag();
   tags = Object.create(null) as Record<string, Tag>;
   children = Object.create(null) as Record<string, Node>;
@@ -20,13 +20,13 @@ class ObjectTreeNode<T extends Record<string, unknown>> implements Node<T> {
 
   constructor(public value: T) {}
 
-  toString() {
+  toString(): string {
     return 'testing';
   }
 }
 
 const objectProxyHandler = {
-  get(node: Node, key: string | symbol) {
+  get(node: Node, key: string | symbol): unknown {
     if (DEBUG && key === REDUX_PROXY_LABEL) {
       return true;
     }
@@ -34,8 +34,8 @@ const objectProxyHandler = {
       return;
     }
 
-    let { value } = node;
-    let childValue = Reflect.get(value, key);
+    const { value } = node;
+    const childValue = Reflect.get(value, key);
 
     if (typeof childValue === 'object' && childValue !== null) {
       let childNode = node.children[key];
@@ -62,20 +62,23 @@ const objectProxyHandler = {
     }
   },
 
-  ownKeys(node: Node) {
+  ownKeys(node: Node): ArrayLike<string | symbol> {
     consumeCollection(node);
     return Reflect.ownKeys(node.value);
   },
 
-  getOwnPropertyDescriptor(node: Node, prop: string | symbol) {
+  getOwnPropertyDescriptor(
+    node: Node,
+    prop: string | symbol
+  ): PropertyDescriptor | undefined {
     return Reflect.getOwnPropertyDescriptor(node.value, prop);
   },
 
-  has(node: Node, prop: string | symbol) {
+  has(node: Node, prop: string | symbol): boolean {
     return Reflect.has(node.value, prop);
   },
 
-  set() {
+  set(): boolean {
     if (DEBUG) {
       throw new Error(
         'You attempted to set a value on the Redux store directly. This is not allowed, you must use `dispatch` to send an action which updates the state of the store.'
@@ -87,7 +90,7 @@ const objectProxyHandler = {
 };
 
 class ArrayTreeNode<T extends Array<unknown>> implements Node<T> {
-  proxy: T = (new Proxy([this], arrayProxyHandler) as unknown) as T;
+  proxy: T = new Proxy([this], arrayProxyHandler) as unknown as T;
   tag = createTag();
   tags = Object.create(null);
   children = Object.create(null);
@@ -97,7 +100,7 @@ class ArrayTreeNode<T extends Array<unknown>> implements Node<T> {
 }
 
 const arrayProxyHandler = {
-  get([node]: [Node], key: string | symbol) {
+  get([node]: [Node], key: string | symbol): unknown {
     if (key === 'length') {
       consumeCollection(node);
     }
@@ -105,20 +108,23 @@ const arrayProxyHandler = {
     return objectProxyHandler.get(node, key);
   },
 
-  ownKeys([node]: [Node]) {
+  ownKeys([node]: [Node]): ArrayLike<string | symbol> {
     return objectProxyHandler.ownKeys(node);
   },
 
-  getOwnPropertyDescriptor([node]: [Node], prop: string | symbol) {
+  getOwnPropertyDescriptor(
+    [node]: [Node],
+    prop: string | symbol
+  ): PropertyDescriptor | undefined {
     return objectProxyHandler.getOwnPropertyDescriptor(node, prop);
   },
 
-  has([node]: [Node], prop: string | symbol) {
+  has([node]: [Node], prop: string | symbol): boolean {
     return objectProxyHandler.has(node, prop);
   },
 
-  set() {
-    return objectProxyHandler.set!();
+  set(): boolean {
+    return objectProxyHandler.set();
   },
 };
 
@@ -147,8 +153,8 @@ export function updateNode<T extends Array<unknown> | Record<string, unknown>>(
   ) {
     dirtyCollection(node);
   } else {
-    let oldKeys = Object.keys(value);
-    let newKeys = Object.keys(newValue);
+    const oldKeys = Object.keys(value);
+    const newKeys = Object.keys(newValue);
 
     if (
       oldKeys.length !== newKeys.length ||
@@ -158,9 +164,9 @@ export function updateNode<T extends Array<unknown> | Record<string, unknown>>(
     }
   }
 
-  for (let key in tags) {
-    let childValue = (value as Record<string, unknown>)[key];
-    let newChildValue = (newValue as Record<string, unknown>)[key];
+  for (const key in tags) {
+    const childValue = (value as Record<string, unknown>)[key];
+    const newChildValue = (newValue as Record<string, unknown>)[key];
 
     if (childValue !== newChildValue) {
       dirtyCollection(node);
@@ -172,7 +178,7 @@ export function updateNode<T extends Array<unknown> | Record<string, unknown>>(
     }
   }
 
-  for (let key in children) {
+  for (const key in children) {
     const childNode = children[key];
     const newChildValue = (newValue as Record<string, unknown>)[key];
 

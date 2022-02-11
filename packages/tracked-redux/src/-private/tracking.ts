@@ -1,6 +1,4 @@
 import { tracked } from '@glimmer/tracking';
-// @ts-ignore
-import Ember from 'ember';
 
 export class Tag {
   @tracked private __tagValue__: undefined;
@@ -38,7 +36,7 @@ export interface Node<
   value: T;
 }
 
-export let consumeCollection = (node: Node): void => {
+export const consumeCollection = (node: Node): void => {
   let tag = node.collectionTag;
 
   if (tag === null) {
@@ -48,16 +46,10 @@ export let consumeCollection = (node: Node): void => {
   consumeTag(tag);
 };
 
-export let dirtyCollection = (node: Node): void => {
+export const dirtyCollection = (node: Node): void => {
   const tag = node.collectionTag;
 
   if (tag !== null) {
     dirtyTag(tag);
   }
 };
-
-if (Ember !== undefined) {
-  consumeCollection = (node): void => Ember.get(node.proxy, '[]');
-  dirtyCollection = (node): void =>
-    Ember.notifyPropertyChange(node.proxy, '[]');
-}
