@@ -1,4 +1,5 @@
 import hbs from 'htmlbars-inline-precompile';
+import { setComponentTemplate } from '@ember/component';
 import { render, settled, findAll } from '@ember/test-helpers';
 import { test } from 'qunit';
 
@@ -22,19 +23,21 @@ export function eachReactivityTest(desc, Klass) {
       }
     }
 
-    this.owner.register('component:test-component', TestComponent);
-    this.owner.register(
-      'template:components/test-component',
-      hbs`
+    this.set(
+      'TestComponent',
+      setComponentTemplate(
+        hbs`
         <ul>
           {{#each this.collection as |value index|}}
             <li class="test-item">{{index}}.{{value}}</li>
           {{/each}}
         </ul>
-      `
+      `,
+        TestComponent
+      )
     );
 
-    await render(hbs`<TestComponent/>`);
+    await render(hbs`{{component (ensure-safe-component this.TestComponent)}}`);
 
     compareResults(
       assert,
@@ -63,19 +66,21 @@ export function eachInReactivityTest(desc, Klass) {
       }
     }
 
-    this.owner.register('component:test-component', TestComponent);
-    this.owner.register(
-      'template:components/test-component',
-      hbs`
+    this.set(
+      'TestComponent',
+      setComponentTemplate(
+        hbs`
         <ul>
           {{#each-in this.collection as |lhs rhs|}}
             <li class="test-item">{{lhs}}.{{rhs}}</li>
           {{/each-in}}
         </ul>
-      `
+      `,
+        TestComponent
+      )
     );
 
-    await render(hbs`<TestComponent/>`);
+    await render(hbs`{{component (ensure-safe-component this.TestComponent)}}`);
 
     let { collection } = instance;
 
