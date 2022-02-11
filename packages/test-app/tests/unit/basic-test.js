@@ -25,31 +25,31 @@ function createCache(fn) {
 
 module('Unit | basic', () => {
   module('primitive root', () => {
-    test('redux works', (assert) => {
+    test('redux works', function (assert) {
       let store = createStore((state = 0) => ++state);
 
       store.dispatch({ type: 'INCREMENT' });
 
-      assert.equal(store.getState(), 2, 'value is correct');
+      assert.strictEqual(store.getState(), 2, 'value is correct');
     });
 
-    test('caching works', (assert) => {
+    test('caching works', function (assert) {
       let store = createStore((state = 0) => ++state);
 
       let cache = createCache(() => store.getState());
 
-      assert.equal(getValue(cache), 1, 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(getValue(cache), 1, 'initial value is correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
-      assert.equal(getValue(cache), 2, 'initial value is correct');
-      assert.equal(callCount(cache), 2, 'cache call count correct');
+      assert.strictEqual(getValue(cache), 2, 'initial value is correct');
+      assert.strictEqual(callCount(cache), 2, 'cache call count correct');
     });
   });
 
   module('object root', () => {
-    test('object updates correctly, does not invalidate cache', (assert) => {
+    test('object updates correctly, does not invalidate cache', function (assert) {
       let count = 0;
 
       let store = createStore((state = { static: 123 }) => {
@@ -65,7 +65,7 @@ module('Unit | basic', () => {
         { static: 123, count: 1 },
         'initial value is correct'
       );
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
@@ -74,10 +74,10 @@ module('Unit | basic', () => {
         { static: 123, count: 2 },
         'initial value is correct'
       );
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
     });
 
-    test('cache updates correctly if dynamic value used', (assert) => {
+    test('cache updates correctly if dynamic value used', function (assert) {
       let count = 0;
 
       let store = createStore((state = { static: 123 }) => {
@@ -89,15 +89,15 @@ module('Unit | basic', () => {
       let cache = createCache(() => store.getState().count);
 
       assert.deepEqual(getValue(cache), 1, 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
       assert.deepEqual(getValue(cache), 2, 'initial value is correct');
-      assert.equal(callCount(cache), 2, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 2, 'cache call count correct');
     });
 
-    test('cache not invalidated if static value used', (assert) => {
+    test('cache not invalidated if static value used', function (assert) {
       let count = 0;
 
       let store = createStore((state = { static: 123 }) => {
@@ -109,15 +109,15 @@ module('Unit | basic', () => {
       let cache = createCache(() => store.getState().static);
 
       assert.deepEqual(getValue(cache), 123, 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
       assert.deepEqual(getValue(cache), 123, 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
     });
 
-    test('cache invalidated correctly if collection used and keys changed', (assert) => {
+    test('cache invalidated correctly if collection used and keys changed', function (assert) {
       let count = 0;
 
       let store = createStore((state = {}) => {
@@ -129,15 +129,15 @@ module('Unit | basic', () => {
       let cache = createCache(() => Object.keys(store.getState()));
 
       assert.deepEqual(getValue(cache), ['1'], 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
       assert.deepEqual(getValue(cache), ['1', '2'], 'initial value is correct');
-      assert.equal(callCount(cache), 2, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 2, 'cache call count correct');
     });
 
-    test('cache invalidated correctly if collection used and keys changed, same number of keys', (assert) => {
+    test('cache invalidated correctly if collection used and keys changed, same number of keys', function (assert) {
       let count = 0;
 
       let store = createStore(() => {
@@ -152,17 +152,17 @@ module('Unit | basic', () => {
       let cache = createCache(() => Object.keys(store.getState()));
 
       assert.deepEqual(getValue(cache), ['foo'], 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
       assert.deepEqual(getValue(cache), ['bar'], 'initial value is correct');
-      assert.equal(callCount(cache), 2, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 2, 'cache call count correct');
     });
   });
 
   module('array root', () => {
-    test('array updates correctly, does not invalidate cache', (assert) => {
+    test('array updates correctly, does not invalidate cache', function (assert) {
       let count = 0;
 
       let store = createStore((state = []) => {
@@ -172,15 +172,15 @@ module('Unit | basic', () => {
       let cache = createCache(() => store.getState());
 
       assert.deepEqual(getValue(cache), [1], 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
       assert.deepEqual(getValue(cache), [1, 2], 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
     });
 
-    test('cache updates correctly if dynamic value used', (assert) => {
+    test('cache updates correctly if dynamic value used', function (assert) {
       let count = 0;
 
       let store = createStore(() => {
@@ -190,15 +190,15 @@ module('Unit | basic', () => {
       let cache = createCache(() => store.getState()[0]);
 
       assert.deepEqual(getValue(cache), 1, 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
       assert.deepEqual(getValue(cache), 2, 'initial value is correct');
-      assert.equal(callCount(cache), 2, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 2, 'cache call count correct');
     });
 
-    test('cache not invalidated if static value used', (assert) => {
+    test('cache not invalidated if static value used', function (assert) {
       let count = 0;
 
       let store = createStore(() => {
@@ -210,15 +210,15 @@ module('Unit | basic', () => {
       let cache = createCache(() => store.getState()[0]);
 
       assert.deepEqual(getValue(cache), 123, 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
       assert.deepEqual(getValue(cache), 123, 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
     });
 
-    test('cache invalidated correctly if iteration used and items added', (assert) => {
+    test('cache invalidated correctly if iteration used and items added', function (assert) {
       let count = 0;
 
       let store = createStore((state = []) => {
@@ -228,15 +228,15 @@ module('Unit | basic', () => {
       let cache = createCache(() => store.getState().map((v) => v + 1));
 
       assert.deepEqual(getValue(cache), [2], 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
       assert.deepEqual(getValue(cache), [2, 3], 'initial value is correct');
-      assert.equal(callCount(cache), 2, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 2, 'cache call count correct');
     });
 
-    test('cache invalidated correctly if iteration used and items changed', (assert) => {
+    test('cache invalidated correctly if iteration used and items changed', function (assert) {
       let count = 0;
 
       let store = createStore(() => {
@@ -246,17 +246,17 @@ module('Unit | basic', () => {
       let cache = createCache(() => store.getState().map((v) => v + 1));
 
       assert.deepEqual(getValue(cache), [2], 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'INCREMENT' });
 
       assert.deepEqual(getValue(cache), [3], 'initial value is correct');
-      assert.equal(callCount(cache), 2, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 2, 'cache call count correct');
     });
   });
 
   module('nested values', () => {
-    test('object updates correctly, does not invalidate cache', (assert) => {
+    test('object updates correctly, does not invalidate cache', function (assert) {
       let store = createStore((state = { arr: [{ foo: 123 }] }, { update }) => {
         return { ...state, ...update };
       });
@@ -268,7 +268,7 @@ module('Unit | basic', () => {
         { arr: [{ foo: 123 }] },
         'initial value is correct'
       );
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'UPDATE', update: { arr: [{ foo: 456 }] } });
 
@@ -277,10 +277,10 @@ module('Unit | basic', () => {
         { arr: [{ foo: 456 }] },
         'initial value is correct'
       );
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
     });
 
-    test('cache updates correctly if dynamic value used', (assert) => {
+    test('cache updates correctly if dynamic value used', function (assert) {
       let store = createStore((state = { arr: [{ foo: 123 }] }, { update }) => {
         return { ...state, ...update };
       });
@@ -288,15 +288,15 @@ module('Unit | basic', () => {
       let cache = createCache(() => store.getState().arr[0].foo);
 
       assert.deepEqual(getValue(cache), 123, 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'UPDATE', update: { arr: [{ foo: 456 }] } });
 
       assert.deepEqual(getValue(cache), 456, 'initial value is correct');
-      assert.equal(callCount(cache), 2, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 2, 'cache call count correct');
     });
 
-    test('cache not invalidated if static value used', (assert) => {
+    test('cache not invalidated if static value used', function (assert) {
       let store = createStore(
         (state = { arr: [{ foo: 123 }, { bar: 456 }] }, { update }) => {
           return {
@@ -316,12 +316,12 @@ module('Unit | basic', () => {
       let cache = createCache(() => store.getState().arr[1].bar);
 
       assert.deepEqual(getValue(cache), 456, 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
 
       store.dispatch({ type: 'UPDATE', update: { foo: 321 } });
 
       assert.deepEqual(getValue(cache), 456, 'initial value is correct');
-      assert.equal(callCount(cache), 1, 'cache call count correct');
+      assert.strictEqual(callCount(cache), 1, 'cache call count correct');
     });
   });
 });

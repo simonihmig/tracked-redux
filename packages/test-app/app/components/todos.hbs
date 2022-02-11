@@ -1,12 +1,15 @@
 <ul>
   {{#each this.redux.state.todos as |todo|}}
     <li>
-      <input type="checkbox" checked={{todo.completed}} {{on "click" (fn this.toggleTodo todo)}} />
-      {{todo.completed}}
-      {{todo.text}}
+      <label>
+        <input type="checkbox" checked={{todo.completed}} {{on "click" (fn this.toggleTodo todo)}} />
+        {{todo.completed}}
+        {{todo.text}}
+      </label>
     </li>
   {{/each}}
 </ul>
 
-<input value={{this.input}} {{on "input" this.updateInput}}/>
+<label for="item-name">Name:</label>
+<input id="item-name" value={{this.input}} {{on "input" this.updateInput}}/>
 <button type="button" {{on "click" this.addTodo}}>Add Item</button>
