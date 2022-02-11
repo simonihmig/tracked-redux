@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@embroider/addon-shim": "^1.0.0",
+    "ember-tracked-storage-polyfill": "^1.0.0",
     "redux": "^4.1.2"
   },
   "devDependencies": {
