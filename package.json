@@ -1,7 +1,7 @@
 {
   "version": "0.0.0",
   "private": true,
-  "repository": "",
+  "repository": "https://github.com/simonihmig/tracked-redux.git",
   "license": "MIT",
   "author": "",
   "scripts": {
