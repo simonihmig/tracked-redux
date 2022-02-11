@@ -4,28 +4,51 @@
   "repository": "https://github.com/simonihmig/tracked-redux.git",
   "license": "MIT",
   "author": "",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
+    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
+    "lint:addon": "yarn workspace tracked-redux run lint",
+    "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:fix:*",
+    "lint:fix:addon": "yarn workspace tracked-redux run lint:fix",
+    "lint:fix:test-app": "yarn workspace test-app run lint:fix",
+    "lint:test-app": "yarn workspace test-app run lint",
     "prepare": "yarn workspace tracked-redux run prepare",
     "start": "npm-run-all --parallel start:*",
     "start:addon": "yarn workspace tracked-redux run start",
     "start:test-app": "yarn workspace test-app run start",
-    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
-    "lint:addon": "yarn workspace tracked-redux run lint",
-    "lint:test-app": "yarn workspace test-app run lint",
-    "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:fix:*",
-    "lint:fix:addon": "yarn workspace tracked-redux run lint:fix",
-    "lint:fix:test-app": "yarn workspace test-app run lint:fix",
     "test": "npm-run-all --aggregate-output --continue-on-error --parallel \"test:!(watch)\"",
-    "test:watch": "npm-run-all --aggregate-output --continue-on-error --parallel test:watch:*",
     "test:test-app": "yarn workspace test-app run test:ember",
-    "test:watch:test-app": "yarn workspace test-app run test:watch",
-    "test:watch:addon": "yarn workspace tracked-redux run start"
+    "test:watch": "npm-run-all --aggregate-output --continue-on-error --parallel test:watch:*",
+    "test:watch:addon": "yarn workspace tracked-redux run start",
+    "test:watch:test-app": "yarn workspace test-app run test:watch"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "release-it": "^14.2.1",
+    "release-it-lerna-changelog": "^3.1.0",
+    "release-it-yarn-workspaces": "^2.0.0"
   },
-  "workspaces": [
-    "packages/*"
-  ]
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "release-it": {
+    "plugins": {
+      "release-it-lerna-changelog": {
+        "infile": "CHANGELOG.md",
+        "launchEditor": true
+      },
+      "release-it-yarn-workspaces": true
+    },
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "tokenRef": "GITHUB_AUTH"
+    },
+    "npm": false
+  }
 }
