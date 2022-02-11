@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "ES2019",
     "module": "es2015",
     "inlineSourceMap": true,
     "inlineSources": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "allowJs": true,
-    "outDir": "addon",
-    "strict": true
+    "strict": true,
+    "declaration": true
   },
   "include": [
     "src/**/*",

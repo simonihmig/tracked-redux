@@ -1,4 +1,6 @@
 import { tracked } from '@glimmer/tracking';
+// @ts-ignore
+import Ember from 'ember';
 
 export class Tag {
   @tracked private __tagValue__: undefined;
@@ -53,9 +55,6 @@ export let dirtyCollection = (node: Node): void => {
     dirtyTag(tag);
   }
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const Ember: any;
 
 if (Ember !== undefined) {
   consumeCollection = (node): void => Ember.get(node.proxy, '[]');
