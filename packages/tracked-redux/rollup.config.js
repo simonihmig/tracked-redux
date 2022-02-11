@@ -22,9 +22,7 @@ export default {
     // addon.appReexports([]),
 
     // compile TypeScript
-    typescript({
-      transpiler: 'babel',
-    }),
+    typescript({}),
 
     // Follow the V2 Addon rules about dependencies. Your code can import from
     // `dependencies` and `peerDependencies` as well as standard Ember-provided
