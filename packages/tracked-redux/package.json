@@ -5,9 +5,12 @@
   "keywords": [
     "ember-addon"
   ],
-  "repository": "",
+  "repository": "https://github.com/simonihmig/tracked-redux.git",
   "license": "MIT",
-  "author": "",
+  "author": "Chris H Garrett",
+  "contributors": [
+    "Simon Ihmig"
+  ],
   "files": [
     "addon-main.js",
     "dist"
