@@ -1,3 +1,24 @@
+
+## v1.0.0 (2022-02-11)
+
+#### :boom: Breaking Change
+* `test-app`, `tracked-redux`
+  * [#120](https://github.com/simonihmig/tracked-redux/pull/120) Convert to v2 Ember addon, drop support for Ember < 3.24 ([@simonihmig](https://github.com/simonihmig))
+
+#### :rocket: Enhancement
+* `tracked-redux`
+  * [#121](https://github.com/simonihmig/tracked-redux/pull/121) Use ember-tracked-storage-polyfill ([@simonihmig](https://github.com/simonihmig))
+* `test-app`, `tracked-redux`
+  * [#120](https://github.com/simonihmig/tracked-redux/pull/120) Convert to v2 Ember addon, drop support for Ember < 3.24 ([@simonihmig](https://github.com/simonihmig))
+
+#### :house: Internal
+* [#122](https://github.com/simonihmig/tracked-redux/pull/122) Setup release-it ([@simonihmig](https://github.com/simonihmig))
+* [#114](https://github.com/simonihmig/tracked-redux/pull/114) Migrate proxy.js to TS, use strict types ([@simonihmig](https://github.com/simonihmig))
+
+#### Committers: 2
+- Simon Ihmig ([@simonihmig](https://github.com/simonihmig))
+- [@dependabot-preview[bot]](https://github.com/apps/dependabot-preview)
+
 ## v0.1.1 (2021-03-04)
 
 #### :bug: Bug Fix
