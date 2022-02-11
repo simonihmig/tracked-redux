@@ -19,7 +19,7 @@
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "start": "ember serve",
-    "test": "npm-run-all lint test:*",
+    "test": "npm-run-all lint \"test:!(watch)\"",
     "test:ember": "ember test",
     "test:watch": "ember test --server"
   },
