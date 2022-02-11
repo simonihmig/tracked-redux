@@ -17,7 +17,7 @@
     "lint:fix:test-app": "yarn workspace test-app run lint:fix",
     "test": "npm-run-all --aggregate-output --continue-on-error --parallel \"test:!(watch)\"",
     "test:watch": "npm-run-all --aggregate-output --continue-on-error --parallel test:watch:*",
-    "test:test-app": "yarn workspace test-app run test",
+    "test:test-app": "yarn workspace test-app run test:ember",
     "test:watch:test-app": "yarn workspace test-app run test:watch",
     "test:watch:addon": "yarn workspace tracked-redux run start"
   },
