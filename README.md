@@ -1,6 +1,8 @@
 tracked-redux
 ==============================================================================
 
+[![CI](https://github.com/simonihmig/tracked-redux/actions/workflows/ci.yml/badge.svg)](https://github.com/simonihmig/tracked-redux/actions/workflows/ci.yml)
+
 This Ember addon provides an autotracked version of [Redux](https://redux.js.org/).
 
 
@@ -8,8 +10,7 @@ Compatibility
 ------------------------------------------------------------------------------
 
 * Ember.js v3.24 or above
-* Ember CLI v3.24 or above
-* Node.js v12 or above
+* Embroider or ember-auto-import v2
 
 
 Installation
