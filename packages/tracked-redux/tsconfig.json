@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "es2015",
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "strict": true,
+    "declaration": true
+  },
+  "include": [
+    "src/**/*",
+  ]
+}
