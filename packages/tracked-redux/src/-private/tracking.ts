@@ -1,25 +1,21 @@
-import { tracked } from '@glimmer/tracking';
+import {
+  createStorage,
+  getValue,
+  setValue,
+  TrackedStorage,
+} from 'ember-tracked-storage-polyfill';
 
-export class Tag {
-  @tracked private __tagValue__: undefined;
+export type Tag = TrackedStorage<unknown>;
 
-  static consumeTag(tag: Tag): void {
-    // read the tag value
-    tag.__tagValue__;
-  }
-
-  static dirtyTag(tag: Tag): void {
-    // write the tag value
-    tag.__tagValue__ = undefined;
-  }
-}
+const neverEq = (): boolean => false;
 
 export function createTag(): Tag {
-  return new Tag();
+  return createStorage(null, neverEq);
 }
-
-export const consumeTag = Tag.consumeTag;
-export const dirtyTag = Tag.dirtyTag;
+export const consumeTag = getValue;
+export function dirtyTag(tag: Tag): void {
+  setValue(tag, null);
+}
 
 ////////////
 
