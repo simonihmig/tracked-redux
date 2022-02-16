@@ -1,6 +1,6 @@
 import {
   createStorage,
-  getValue,
+  getValue as consumeTag,
   setValue,
   TrackedStorage,
 } from 'ember-tracked-storage-polyfill';
@@ -12,7 +12,7 @@ const neverEq = (): boolean => false;
 export function createTag(): Tag {
   return createStorage(null, neverEq);
 }
-export const consumeTag = getValue;
+export { consumeTag };
 export function dirtyTag(tag: Tag): void {
   setValue(tag, null);
 }
