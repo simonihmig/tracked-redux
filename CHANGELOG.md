@@ -1,4 +1,17 @@
 
+
+## v1.0.1 (2022-08-09)
+
+#### :bug: Bug Fix
+* `test-app`, `tracked-redux`
+  * [#126](https://github.com/simonihmig/tracked-redux/pull/126) Fix array proxies not being iterable ([@simonihmig](https://github.com/simonihmig))
+* `tracked-redux`
+  * [#123](https://github.com/simonihmig/tracked-redux/pull/123) Defend against use in cycles ([@ef4](https://github.com/ef4))
+
+#### Committers: 2
+- Edward Faulkner ([@ef4](https://github.com/ef4))
+- Simon Ihmig ([@simonihmig](https://github.com/simonihmig))
+
 ## v1.0.0 (2022-02-11)
 
 #### :boom: Breaking Change

@@ -1,6 +1,6 @@
 {
   "name": "test-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Small description for test-app goes here",
   "repository": "",
@@ -63,7 +63,7 @@
     "prettier": "^2.5.1",
     "qunit": "^2.17.2",
     "qunit-dom": "^2.0.0",
-    "tracked-redux": "^1.0.0",
+    "tracked-redux": "^1.0.1",
     "webpack": "^5.65.0"
   },
   "engines": {
