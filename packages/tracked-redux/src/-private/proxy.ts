@@ -30,12 +30,13 @@ const objectProxyHandler = {
     if (DEBUG && key === REDUX_PROXY_LABEL) {
       return true;
     }
-    if (typeof key === 'symbol') {
-      return;
-    }
 
     const { value } = node;
     const childValue = Reflect.get(value, key);
+
+    if (typeof key === 'symbol') {
+      return childValue;
+    }
 
     if (typeof childValue === 'object' && childValue !== null) {
       let childNode = node.children[key];
