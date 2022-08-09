@@ -162,6 +162,19 @@ module('Unit | basic', () => {
   });
 
   module('array root', () => {
+    test('is iterable', function (assert) {
+      let count = 0;
+
+      let store = createStore((state = []) => {
+        return [...state, ++count];
+      });
+      store.dispatch({ type: 'INCREMENT' });
+
+      let state = store.getState();
+      assert.true(Array.isArray(state), 'tracked array is an array');
+      assert.deepEqual([...state], [1, 2], 'tracked array is iterable');
+    });
+
     test('array updates correctly, does not invalidate cache', function (assert) {
       let count = 0;
 
